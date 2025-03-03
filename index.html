@@ -45,36 +45,69 @@
       
       /* Mobile-specific adjustments for YouTube videos */
       @media screen and (max-width: 991px) {
+        /* More aggressive video sizing for mobile */
+        .youtube-background {
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          z-index: 1 !important;
+        }
+        
         .youtube-background iframe {
-          width: 300%; /* Increase width on mobile to ensure coverage */
-          height: 300%; /* Increase height on mobile to ensure coverage */
+          width: 400% !important; /* Much larger to ensure coverage */
+          height: 400% !important; /* Much larger to ensure coverage */
+          min-width: 400% !important;
+          min-height: 400% !important;
         }
         
-        .slider__images-slide-inner {
-          overflow: hidden; /* Ensure content doesn't overflow */
-        }
-        
-        .slider-fullscreen-projects__images .swiper-slide {
-          overflow: hidden;
-        }
-        
-        /* Ensure slider takes full height on mobile */
-        .section-fullheight__inner_mobile {
-          min-height: 100vh !important;
-        }
-        
-        .slider-fullscreen-projects__images {
-          height: 100vh !important;
-        }
-        
-        /* Fix for video container on mobile */
-        .slider__images-slide-inner.js-transition-img {
-          height: 100vh !important;
-        }
-        
-        /* Ensure videos are visible and properly sized */
+        /* Force full viewport height */
+        .section-fullheight, 
+        .section-fullheight__inner,
+        .section-fullheight__inner_mobile,
+        .slider-fullscreen-projects,
+        .slider-fullscreen-projects__images,
+        .swiper-container,
+        .swiper-wrapper,
+        .swiper-slide,
+        .slider__images-slide-inner,
         .slider__bg {
           height: 100vh !important;
+          min-height: 100vh !important;
+          max-height: 100vh !important;
+          overflow: hidden !important;
+        }
+        
+        /* Ensure content is properly positioned */
+        .slider-fullscreen-projects__content {
+          z-index: 2 !important;
+          position: relative !important;
+        }
+        
+        /* Ensure overlay is properly positioned */
+        .slider__overlay {
+          z-index: 1 !important;
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        
+        /* Fix for video container */
+        .slider__images-slide-inner.js-transition-img {
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 100vh !important;
+        }
+        
+        /* Fix for transformed elements */
+        .js-transition-img__transformed-el {
+          width: 100% !important;
+          height: 100% !important;
         }
       }
     </style>
@@ -604,15 +637,20 @@
             var iframe = player.getIframe();
             if (iframe) {
               if (isMobile) {
-                // For mobile devices
-                if (isLandscape) {
-                  // Landscape mode needs more width coverage
-                  iframe.style.width = '300%';
-                  iframe.style.height = '300%';
-                } else {
-                  // Portrait mode needs more height coverage
-                  iframe.style.width = '300%';
-                  iframe.style.height = '300%';
+                // For mobile devices - much more aggressive sizing
+                iframe.style.width = '400%';
+                iframe.style.height = '400%';
+                iframe.style.minWidth = '400%';
+                iframe.style.minHeight = '400%';
+                
+                // Force position to center
+                var parent = iframe.parentElement;
+                if (parent) {
+                  parent.style.position = 'absolute';
+                  parent.style.top = '0';
+                  parent.style.left = '0';
+                  parent.style.width = '100%';
+                  parent.style.height = '100%';
                 }
               } else {
                 // For desktop
@@ -621,6 +659,15 @@
               }
             }
           }
+        });
+        
+        // Force all slider elements to full viewport height
+        var elements = document.querySelectorAll('.section-fullheight, .section-fullheight__inner, .section-fullheight__inner_mobile, .slider-fullscreen-projects, .slider-fullscreen-projects__images, .swiper-container, .swiper-wrapper, .swiper-slide, .slider__images-slide-inner, .slider__bg');
+        elements.forEach(function(el) {
+          el.style.height = '100vh';
+          el.style.minHeight = '100vh';
+          el.style.maxHeight = '100vh';
+          el.style.overflow = 'hidden';
         });
       }
       
@@ -670,11 +717,13 @@
                 
                 // Adjust size based on device
                 if (isMobile) {
-                  playerElement.style.width = '300%';  // Larger on mobile to ensure coverage
-                  playerElement.style.height = '300%';
+                  playerElement.style.width = '400%';  // Much larger on mobile to ensure coverage
+                  playerElement.style.height = '400%';
+                  playerElement.style.minWidth = '400%';
+                  playerElement.style.minHeight = '400%';
                 } else {
-                  playerElement.style.width = '100%';
-                  playerElement.style.height = '100%';
+                  playerElement.style.width = '200%';
+                  playerElement.style.height = '200%';
                 }
                 
                 playerElement.style.pointerEvents = 'none';
@@ -746,6 +795,14 @@
             window.addEventListener('orientationchange', function() {
               setTimeout(adjustVideoSize, 300); // Slight delay to ensure orientation has completed
             });
+            
+            // Force resize on load
+            adjustVideoSize();
+            
+            // Additional resize calls to ensure proper sizing
+            setTimeout(adjustVideoSize, 500);
+            setTimeout(adjustVideoSize, 1000);
+            setTimeout(adjustVideoSize, 2000);
           }
         }, 100);
       }
@@ -756,6 +813,13 @@
           // YouTube API already loaded
           initSwiperEvents();
         }
+        
+        // Force resize on DOMContentLoaded
+        setTimeout(function() {
+          if (typeof adjustVideoSize === 'function') {
+            adjustVideoSize();
+          }
+        }, 500);
       });
     </script>
   </body>
