@@ -628,6 +628,10 @@
             
             var swiper = document.querySelector('.js-slider-fullscreen-projects__images').swiper;
             
+            // Ensure swiper recognizes all slides
+            swiper.updateSize();
+            swiper.updateSlides();
+            
             // Play only the active slide's video initially
             var activeIndex = swiper.activeIndex;
             players.forEach(function(player, index) {
