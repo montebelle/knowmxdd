@@ -9,6 +9,40 @@
         });
     </script>
     <!-- Any page-specific head content can go here -->
+    <style>
+      /* YouTube Background Video Styles */
+      .youtube-background {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      .youtube-background iframe {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200%;
+        height: 200%;
+        pointer-events: none;
+      }
+      
+      /* Ensure the slider background container has proper dimensions */
+      .slider__bg {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      /* Fix for YouTube video positioning */
+      .slider__images-slide-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
     <div data-barba="wrapper">
@@ -219,22 +253,30 @@
                   <div class="swiper-wrapper">
                     <div class="swiper-slide overflow">
                       <div class="slider__images-slide-inner js-transition-img overflow" data-swiper-parallax="90%">
-                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el" data-background="img/assets/projects/project-7.jpg"></div>
+                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el">
+                          <div class="youtube-background" data-youtube-id="kSRWDr44Mfo" data-start="0"></div>
+                        </div>
                       </div>
                     </div>
                     <div class="swiper-slide overflow">
                       <div class="slider__images-slide-inner js-transition-img overflow" data-swiper-parallax="90%">
-                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el" data-background="img/assets/projects/project-8.jpg"></div>
+                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el">
+                          <div class="youtube-background" data-youtube-id="f8DbLAmTL_Y" data-start="0"></div>
+                        </div>
                       </div>
                     </div>
                     <div class="swiper-slide overflow">
                       <div class="slider__images-slide-inner js-transition-img overflow" data-swiper-parallax="90%">
-                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el" data-background="img/assets/projects/project-11.jpg"></div>
+                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el">
+                          <div class="youtube-background" data-youtube-id="T0GTVcwWq34" data-start="0"></div>
+                        </div>
                       </div>
                     </div>
                     <div class="swiper-slide overflow">
                       <div class="slider__images-slide-inner js-transition-img overflow" data-swiper-parallax="90%">
-                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el" data-background="img/assets/projects/project-12.jpg"></div>
+                        <div class="slider__bg swiper-lazy js-transition-img__transformed-el">
+                          <div class="youtube-background" data-youtube-id="3JxA_froL8c" data-start="0"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -464,5 +506,117 @@
     <script src="js/components.js"></script>
     <!-- - COMPONENTS -->
     <script src="https://maps.googleapis.com/maps/api/js?callback=Function.prototype&amp;key=AIzaSyBwR_TrF6h7-pMxkKv_q2t8BXX3w6QuFOc" async></script>
+    
+    <!-- YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+      // YouTube Background Video Player
+      var players = [];
+      
+      function onYouTubeIframeAPIReady() {
+        // Find all YouTube background elements
+        var youtubeBackgrounds = document.querySelectorAll('.youtube-background');
+        
+        // Initialize each YouTube player
+        youtubeBackgrounds.forEach(function(element, index) {
+          var containerId = 'youtube-player-' + index;
+          var playerDiv = document.createElement('div');
+          playerDiv.id = containerId;
+          element.appendChild(playerDiv);
+          
+          var videoId = element.getAttribute('data-youtube-id');
+          var startTime = parseInt(element.getAttribute('data-start') || '0');
+          
+          players[index] = new YT.Player(containerId, {
+            videoId: videoId,
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              disablekb: 1,
+              fs: 0,
+              cc_load_policy: 0,
+              iv_load_policy: 3,
+              modestbranding: 1,
+              rel: 0,
+              showinfo: 0,
+              start: startTime,
+              mute: 1, // Must be muted for autoplay to work
+              loop: 1,
+              playlist: videoId // Required for looping
+            },
+            events: {
+              onReady: function(event) {
+                event.target.mute(); // Ensure muted for autoplay
+                event.target.playVideo();
+                
+                // Make the video fill the container while maintaining aspect ratio
+                var playerElement = document.getElementById(containerId);
+                playerElement.style.position = 'absolute';
+                playerElement.style.top = '50%';
+                playerElement.style.left = '50%';
+                playerElement.style.transform = 'translate(-50%, -50%)';
+                playerElement.style.width = '100%';
+                playerElement.style.height = '100%';
+                playerElement.style.pointerEvents = 'none';
+              },
+              onStateChange: function(event) {
+                // If video ends, restart it
+                if (event.data === YT.PlayerState.ENDED) {
+                  event.target.playVideo();
+                }
+              }
+            }
+          });
+        });
+        
+        // Initialize Swiper event listeners after YouTube API is ready
+        initSwiperEvents();
+      }
+      
+      // Handle Swiper slide change to pause/play videos
+      function initSwiperEvents() {
+        // Wait for Swiper to be initialized
+        var checkSwiperInterval = setInterval(function() {
+          if (window.Swiper && document.querySelector('.js-slider-fullscreen-projects__images').swiper) {
+            clearInterval(checkSwiperInterval);
+            
+            var swiper = document.querySelector('.js-slider-fullscreen-projects__images').swiper;
+            
+            // Play only the active slide's video initially
+            var activeIndex = swiper.activeIndex;
+            players.forEach(function(player, index) {
+              if (index !== activeIndex && player && typeof player.pauseVideo === 'function') {
+                player.pauseVideo();
+              }
+            });
+            
+            // Handle slide changes
+            swiper.on('slideChangeTransitionStart', function() {
+              var activeIndex = swiper.activeIndex;
+              
+              // Pause all videos
+              players.forEach(function(player, index) {
+                if (player && typeof player.pauseVideo === 'function') {
+                  player.pauseVideo();
+                }
+              });
+              
+              // Play the active slide's video
+              if (players[activeIndex] && typeof players[activeIndex].playVideo === 'function') {
+                players[activeIndex].playVideo();
+              }
+            });
+          }
+        }, 100);
+      }
+      
+      // Fallback initialization if Swiper is ready before YouTube API
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.YT && window.YT.Player) {
+          // YouTube API already loaded
+          initSwiperEvents();
+        }
+      });
+    </script>
   </body>
 </html>
