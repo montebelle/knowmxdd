@@ -42,26 +42,6 @@
         width: 100%;
         height: 100%;
       }
-      
-      /* Mobile optimizations for videos */
-      @media screen and (max-width: 767px) {
-        .youtube-background iframe {
-          width: 300%; /* Increase width on mobile to ensure coverage */
-          height: 300%; /* Increase height on mobile to ensure coverage */
-        }
-        
-        .slider-fullscreen-projects__images {
-          height: 100vh !important; /* Force full viewport height on mobile */
-        }
-        
-        .slider__images-slide-inner {
-          height: 100vh !important; /* Ensure slide inner takes full height */
-        }
-        
-        .slider__bg {
-          height: 100vh !important; /* Ensure background takes full height */
-        }
-      }
     </style>
   </head>
   <body>
@@ -621,11 +601,8 @@
                 playerElement.style.top = '50%';
                 playerElement.style.left = '50%';
                 playerElement.style.transform = 'translate(-50%, -50%)';
-                
-                // Set initial size
-                setPlayerSize(playerElement);
-                
-                // Add pointer-events none to prevent interaction
+                playerElement.style.width = '100%';
+                playerElement.style.height = '100%';
                 playerElement.style.pointerEvents = 'none';
               },
               onStateChange: function(event) {
@@ -640,28 +617,6 @@
         
         // Initialize Swiper event listeners after YouTube API is ready
         initSwiperEvents();
-        
-        // Handle window resize for responsive videos
-        window.addEventListener('resize', function() {
-          players.forEach(function(player, index) {
-            if (player && player.getIframe) {
-              setPlayerSize(player.getIframe());
-            }
-          });
-        });
-      }
-      
-      // Function to set player size based on device
-      function setPlayerSize(playerElement) {
-        if (window.innerWidth <= 767) {
-          // Mobile - make video larger to ensure coverage
-          playerElement.style.width = '300%';
-          playerElement.style.height = '300%';
-        } else {
-          // Desktop
-          playerElement.style.width = '200%';
-          playerElement.style.height = '200%';
-        }
       }
       
       // Handle Swiper slide change to pause/play videos
@@ -704,26 +659,6 @@
           }
         }, 100);
       }
-      
-      // Handle orientation change for mobile devices
-      window.addEventListener('orientationchange', function() {
-        // Short delay to allow the orientation change to complete
-        setTimeout(function() {
-          // Update swiper dimensions
-          if (window.Swiper && document.querySelector('.js-slider-fullscreen-projects__images').swiper) {
-            var swiper = document.querySelector('.js-slider-fullscreen-projects__images').swiper;
-            swiper.updateSize();
-            swiper.updateSlides();
-          }
-          
-          // Update all player sizes
-          players.forEach(function(player, index) {
-            if (player && player.getIframe) {
-              setPlayerSize(player.getIframe());
-            }
-          });
-        }, 300);
-      });
       
       // Fallback initialization if Swiper is ready before YouTube API
       document.addEventListener('DOMContentLoaded', function() {
