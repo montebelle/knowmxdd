@@ -1,38 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
-    <title>Jalaw Benjamin - Portfolio</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta content="telephone=no" name="format-detection"/>
-    <meta name="HandheldFriendly" content="true"/>
-    <meta name="description" content="Rhye – AJAX Portfolio HTML5 Template"/>
-    <!-- Google Fonts -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Cinzel:400,700%7CRaleway:500,500i,600,700%7CMaterial+Icons&amp;display=swap"/>
-    <!-- Template Vendor's Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="css/vendor.css"/>
-    <!-- Template Main Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <!-- Favicons & App Icons -->
-    <link rel="apple-touch-icon" sizes="57x57" href="img/content/apple-icon-57x57.png"/>
-    <link rel="apple-touch-icon" sizes="60x60" href="img/content/apple-icon-60x60.png"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="img/content/apple-icon-72x72.png"/>
-    <link rel="apple-touch-icon" sizes="76x76" href="img/content/apple-icon-76x76.png"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="img/content/apple-icon-114x114.png"/>
-    <link rel="apple-touch-icon" sizes="120x120" href="img/content/apple-icon-120x120.png"/>
-    <link rel="apple-touch-icon" sizes="144x144" href="img/content/apple-icon-144x144.png"/>
-    <link rel="apple-touch-icon" sizes="152x152" href="img/content/apple-icon-152x152.png"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="img/content/apple-icon-180x180.png"/>
-    <link rel="icon" type="image/png" sizes="192x192" href="img/content/android-icon-192x192.png"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="img/content/favicon-32x32.png"/>
-    <link rel="icon" type="image/png" sizes="96x96" href="img/content/favicon-96x96.png"/>
-    <link rel="icon" type="image/png" sizes="16x16" href="img/content/favicon-16x16.png"/>
-    <link rel="manifest" href="img/content/manifest.json"/>
-    <meta name="msapplication-TileColor" content="#ffffff"/>
-    <meta name="msapplication-TileImage" content="img/content/ms-icon-144x144.png"/>
-    <meta name="theme-color" content="#ffffff"/>
-    <link rel="icon" type="image/x-icon" href="img/content/favicon.ico"/>
+    <script>
+      fetch('head.html')
+        .then(response => response.text())
+        .then(data => {
+          document.querySelector('head').innerHTML += data;
+        });
+    </script>
+    <!-- Any page-specific head content can go here -->
   </head>
   <body>
     <div data-barba="wrapper">
@@ -41,8 +17,8 @@
         <div class="preloader__content">
           <!-- header -->
           <div class="preloader__header mt-auto">
-            <div class="preloader__heading h2">Rhye Kinsey</div>
-            <div class="preloader__subline small-caps mt-1">Creative Developer</div>
+            <div class="preloader__heading h2">Jalaw Benjamin</div>
+            <div class="preloader__subline small-caps mt-1">Creative Director</div>
           </div>
           <!-- - header -->
           <!-- counter -->
@@ -149,50 +125,13 @@
       <!-- - Cursor Follower-->
       <!-- PAGE HEADER -->
       <header class="header header_menu-right header_fixed container-fluid js-header-sticky" id="page-header" data-arts-theme-text="light" data-arts-header-sticky-theme="bg-dark-2" data-arts-header-logo="secondary" data-arts-header-sticky-logo="secondary" data-arts-header-overlay-theme="dark" data-arts-header-overlay-background="#000">
-        <!-- top bar -->
-        <div class="header__container header__controls">
-          <div class="row justify-content-between align-items-center">
-            <!-- logo -->
-            <div class="col-auto header__col header__col-left"><a class="logo" href="index.html">
-                <div class="logo__wrapper-img">
-                  <!-- primary logo version (for light backgrounds)--><img class="logo__img-primary" src="img/general/logo-black.svg" alt="Rhye HTML5 Template" height="20"/>
-                  <!-- secondary logo version (for dark backgrounds)--><img class="logo__img-secondary" src="img/general/logo-white.svg" alt="Rhye HTML5 Template" height="20"/>
-                </div></a>
-            </div>
-            <!-- - logo -->
-            <!-- burger icon -->
-            <div class="col-auto header__col">
-              <div class="header__burger" id="js-burger" data-arts-cursor="data-arts-cursor" data-arts-cursor-scale="1.7" data-arts-cursor-magnetic="data-arts-cursor-magnetic" data-arts-cursor-hide-native="true">
-                <div class="header__burger-line"></div>
-                <div class="header__burger-line"></div>
-                <div class="header__burger-line"></div>
-              </div>
-            </div>
-            <!-- - burger icon -->
-            <!-- "back" button for submenu nav -->
-            <div class="header__overlay-menu-back" id="js-submenu-back">
-              <div class="arrow arrow-left js-arrow arrow_mini" data-arts-cursor="data-arts-cursor" data-arts-cursor-hide-native="true" data-arts-cursor-scale="0" data-arts-cursor-magnetic="data-arts-cursor-magnetic">
-                <svg class="svg-circle" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <circle class="circle" cx="30" cy="30" r="29" fill="none"></circle>
-                </svg>
-                <div class="arrow__pointer arrow-left__pointer"></div>
-                <div class="arrow__triangle"></div>
-              </div>
-            </div>
-            <!-- - "back" button for submenu nav -->
-          </div>
-        </div>
-        <!-- - top bar -->
         <script>
           fetch('header.html')
             .then(response => response.text())
             .then(data => {
-              document.getElementById('header-container').innerHTML = data;
+              document.getElementById('page-header').innerHTML += data;
             });
         </script>
-        <!-- Add container for header content -->
-        <div id="header-container"></div>
-        <!-- - fullscreen overlay container -->
       </header>
       <!-- - PAGE HEADER -->
       <!-- PAGE MAIN -->
